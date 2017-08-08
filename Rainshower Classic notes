@@ -1,0 +1,42 @@
+The purpose of the game is to move your shirts around the hangers, to avoid getting them wet from the tear shaped raindrops.
+
+The shirts have the following addresses in BizHawk: 0x03C1E8, 0x03C1E9, 0x03C1EA, 0x03C1EB
+In game, they correspond to the top left shirt, top right shirt, bottom left shirt, and bottom right shirt.
+
+Your position is at 0x03C1E4, and can have 4 values.
+
+Each shirt can only be at 2 spots at a time. So they take the values 0 and 1 only.
+
+The drops have the following addresses in Easy mode: 0x03ABBA, 0x03AB3E, 0x03AC36, 0x03ACB2
+Up to 4 water drops can appear at once. Additionally, in "Hard" mode, a raven may appear and change the clothes' states. The ravens make use of the addresses 0x03ABBA, 0x03AB3E. So we need to check the game's difficulty setting, and assign the tears instead as:
+
+Hard mode droplets: 0x03AD2E, 0x03ADAA, 0x03AC36, 0x03ACB2
+
+These are all structs for the droplets. You can offset them by the following to get:
++0x0 - The states the drop should be, vertical-wise (y-position)
++0xF - If it's a raven or droplet. 0x65 means droplet and 0x68 means raven
++0x14 - The states the drop should be, horizontal-wise (x-position)
+
+For the horizontal positions, it can only be at values decimal-wise
+Left side of the house: 52, 80, 108, 136
+Right side of the house: 164, 192, 220, 248
+
+Recall the shirts from above. Given their states, they are affected as follows:
+0x03C1E8 (Top left shirts)
+when at 0, it can be splashed when drops are at positions 52 and 108
+when at 1, it can be splashed when drops are at positions 80 and 136
+
+0x03C1E9 (Top right shirt)
+when at 0, it can be splashed when drops are at position 220
+when at 1, it can be splashed when drops are at position 192
+
+0x03C1EA (Bottom left shirt)
+when at 0, it can be splashed when drops are at position 80
+when at 1, it can be splashed when drops are at position 108
+
+0x03C1EB (Bottom right shirts)
+when at 0, it can be splashed when drops are at positions 192 and 248
+when at 1, it can be splashed when drops are at positions 164 and 220
+
+Top shirts get splashed at the next game tick when the y-position of the tears are at 3, and the shirts states are at the values shown above. Bottom shirts get splashed at the next game tick when the y-position of the tears are at 5. Combining these facts together gives the script.
+Combining these facts together, 

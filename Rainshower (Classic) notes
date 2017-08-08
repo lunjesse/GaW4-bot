@@ -44,5 +44,6 @@ Combining these facts together, we get the script.
 Unused info:
 0x03C461 - Game tick for right sided tears
 0x03C462 - Game tick for left sided tears
+0x03C15C - Max value before game tick loops to 0. Both difficulties start at 40, but after 900 points it remains at 14.
 
 03C461 counts up to a value, then turns to 1. 03C462 then starts looping, and after it reaches the same max value, it repeats.

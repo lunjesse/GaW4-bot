@@ -1,0 +1,31 @@
+Food addresses: 0x03C748, 0x03C75C, 0x03C770
+
+Offsets:
++0x0 - Food exists bool
++0x2 - Which spot it will land on (x-pos, sorta) ranges 0-4
++0x5 - Food "timer"; it's y-pos is determined by it
++0x6 - Minimum value timer can be in to land on frying pan
++0x7 - X position food sprite should be in
++0x8 - If it has been cooked or just thrown; 52 if just thrown, 0 if landed on frying pan before
++0x9 - How many times has the food bounced on pan so far
++0xA - Food state; 0 is raw, 1 is cooked, 2 is burnt
+
+Types of food:
+Egg: 3 bounces to cook; max timer 96
+Pepper: 4 bounces to cook; max timer 144
+Fish: 4 bounces to cook; max timer 112
+Steak: 5 bounces to cook; max timer 128
+Lobster: 5 bounces to cook; max timer 96
+
+Seems 2 bounces after cooking it burns it, and the bounce afterwards destroys it.
+
+Yoshi x-pos (sorta): 0x03C358
+Yoshi's state: 0x03C35A (0 - baby, 1 - adult, 2 - egg follower)
+How much food eaten in current state: 0x03C35B
+Raw foods reset counter to 0. Cooked foods increment by 1. Burnt foods lowers state by 1 (or stun if state is 0)
+
+Takes 5 foods to go from state 0 (baby) to state 1 (adult)
+Takes 5 foods to go from state 1 (adult) to state 2 (egg follower)
+Takes 6 foods to go from state 2 (egg follower) back to state 0 (baby). This pauses the food's flying, but gives 20 points
+
+Starts throwing 4 foods by 185 points in easy.

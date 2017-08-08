@@ -2,16 +2,20 @@ memory.usememorydomain("Combined WRAM")
 while true do
 	local tears = {}
 	local shirts = {[1]=0x03C1E8,[2]=0x03C1E9,[3]=0x03C1EA,[4]=0x03C1EB} --shirts state
-	if memory.readbyte(0x0414A4) > 0 and memory.readbyte(0x0414A0) == 4 then
+	local color
+	if memory.readbyte(0x0414A4) > 0 and memory.readbyte(0x0414A0) == 4 then	--check difficulty and game
 		if memory.readbyte(0x0414A8) == 0  then
 			tears = {[1]=0x03ABBA,[2]=0x03AB3E,[3]=0x03AC36,[4]=0x03ACB2}	-- first 2 tears y position address in game A; game B replaced by crows
-			gui.drawText(3,3,"EASY",'RED')
+			color = "Orange"
+			gui.drawText(120,0,"EASY",color,null,null,null,null,'center')
 		else
 			tears = {[1]=0x03AD2E,[2]=0x03ADAA,[3]=0x03AC36,[4]=0x03ACB2}
-			gui.drawText(3,3,"Hard",'RED')
+			color = "Cyan"
+			gui.drawText(120,0,"Hard",color,null,null,null,null,'center')
 		end
 		for i = 1, 4 do 
-		gui.drawText(3,i*10,"tears:"..memory.readbyte(tears[i]+14),'RED')
+		gui.drawText(3,i*15,i..": ("..memory.readbyte(tears[i]+14)..","..memory.readbyte(tears[i])..")",color)
+		gui.drawText(0,145,"Tick length: "..memory.readbyte(0x03C15C))
 				local p = memory.readbyte(0x03C1E4) -- your position
 				if (memory.readbyte(shirts[1]) == 0) and (memory.readbyte(tears[i]+14) == 52 or memory.readbyte(tears[i]+14) == 108) and (memory.readbyte(tears[i]) == 3) then
 					if (p == 1) then

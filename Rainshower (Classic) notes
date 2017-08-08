@@ -39,4 +39,10 @@ when at 0, it can be splashed when drops are at positions 192 and 248
 when at 1, it can be splashed when drops are at positions 164 and 220
 
 Top shirts get splashed at the next game tick when the y-position of the tears are at 3, and the shirts states are at the values shown above. Bottom shirts get splashed at the next game tick when the y-position of the tears are at 5. Combining these facts together gives the script.
-Combining these facts together, 
+Combining these facts together, we get the script.
+
+Unused info:
+0x03C461 - Game tick for right sided tears
+0x03C462 - Game tick for left sided tears
+
+03C461 counts up to a value, then turns to 1. 03C462 then starts looping, and after it reaches the same max value, it repeats.

@@ -1,0 +1,6 @@
+These are lua scripts for individual subgames in the GBA game: Game & Watch Gallery 4. To run them, do the following:
+
+1. Open the game in BizHawk emulator (download: http://tasvideos.org/BizHawk.html)
+2. Navigate to the subgame itself, based on the name of the script (eg. go to the Classic version of Fire for Fire (Classic).lua
+3. Start the subgame
+4. Drag and drop the script onto the emulator.

@@ -16,16 +16,20 @@ Pepper: 4 bounces to cook; max timer 144
 Fish: 4 bounces to cook; max timer 112
 Steak: 5 bounces to cook; max timer 128
 Lobster: 5 bounces to cook; max timer 96
+Heart: 0 bounces to cook; max timer 144
 
-Seems 2 bounces after cooking it burns it, and the bounce afterwards destroys it.
+Seems 2 bounces after cooking it burns it, and the bounce afterwards destroys it. +10 after the min value timer causess the food to be either eaten by Yoshi or drop to the floor.
 
 Yoshi x-pos (sorta): 0x03C358
 Yoshi's state: 0x03C35A (0 - baby, 1 - adult, 2 - egg follower)
 How much food eaten in current state: 0x03C35B
 Raw foods reset counter to 0. Cooked foods increment by 1. Burnt foods lowers state by 1 (or stun if state is 0)
 
+Yoshi pauses a bit when transitioning states, so might want to take account into that and potentially burn some food.
+
 Takes 5 foods to go from state 0 (baby) to state 1 (adult)
 Takes 5 foods to go from state 1 (adult) to state 2 (egg follower)
 Takes 6 foods to go from state 2 (egg follower) back to state 0 (baby). This pauses the food's flying, but gives 20 points
 
-Starts throwing 4 foods by 185 points in easy.
+Starts throwing 4 foods by 185 points in easy. Seems to be capped at 4 foods, but in hard mode it can start spawning on the right. On Super Hard, food may fly around every time it's bounced.
+

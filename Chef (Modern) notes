@@ -20,7 +20,7 @@ Heart: 0 bounces to cook; max timer 144
 
 Seems 2 bounces after cooking it burns it, and the bounce afterwards destroys it. +10 after the min value timer causess the food to be either eaten by Yoshi or drop to the floor.
 
-Yoshi x-pos (sorta): 0x03C358
+Yoshi x-pos (sorta): 0x03C358 (ranges 0-4)
 Yoshi's state: 0x03C35A (0 - baby, 1 - adult, 2 - egg follower)
 How much food eaten in current state: 0x03C35B
 Raw foods reset counter to 0. Cooked foods increment by 1. Burnt foods lowers state by 1 (or stun if state is 0)
@@ -33,3 +33,15 @@ Takes 6 foods to go from state 2 (egg follower) back to state 0 (baby). This pau
 
 Starts throwing 4 foods by 185 points in easy. Seems to be capped at 4 foods, but in hard mode it can start spawning on the right. On Super Hard, food may fly around every time it's bounced.
 
+Peach's position: 0x03C351 (ranges 0-3)
+Her animation is at 0x03C352. Values are as follows:
+0 - Facing left
+1 - Facing right
+2 - Flip pan animation (Facing left)
+3 - Flip pan animation (Facing right)
+4 - Moving left/right
+5 - Moving left/right
+8 - Turning left
+9 - Turning right
+12 - Turning moving at the same time
+13 - Turning moving at the same time

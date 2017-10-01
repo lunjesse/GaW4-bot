@@ -243,10 +243,11 @@ while true do
 	local nearest_y = 0
 	local nearest_i = 0
 	local nearest_x = 0
+	local yoshi_time = memory.readbyte(0x3C634)
 	for i = 1, 4 do
 		food[i] = GetStats(food_address[i])
 		if food[i].exists > 0 then
-			gui.drawText(3,i*15,i..": "..food[i].y_timer.."/"..food[i].y_min_timer.."x "..food[i].x)
+			gui.drawText(3,i*15,i..": "..food[i].y_timer.."/"..food[i].y_min_timer.."x "..food[i].x.."("..food[i].state..")")
 			--Find the nearest food in terms of the y_min value
 			if (nearest_y == 0 or nearest_y >= food[i].y_min_timer - food[i].y_timer) then
 				nearest_y = (food[i].y_min_timer+9) - food[i].y_timer	--The 9 is for the frames needed for Yoshi to eat the food
@@ -258,10 +259,16 @@ while true do
 	if nearest_y > 0 and food[nearest_i].state ~= 1 then	--it's not raw nor burnt
 		travel(nearest_x)
 	elseif nearest_y > 0 and food[nearest_i].state == 1 then
-		travel2(nearest_x)
+		if (memory.readbyte(0x03C634) == 0 or memory.readbyte(0x03C634) == 24) then
+			travel2(nearest_x)
+		else
+		travel(nearest_x)
+		end
 	end
+	
 	gui.drawText(0,85,nearest_i..": Time:"..nearest_y.." X:"..nearest_x)
 	gui.drawText(0,100,"Yoshi:"..memory.readbyte(x_yoshi).."Food:"..memory.readbyte(0x03C35B))
-	gui.drawText(0,115,"Peach:"..memory.readbyte(0x03C351))
+	gui.drawText(0,145,"Peach:"..memory.readbyte(0x03C351))
 	emu.frameadvance()
 end
+

@@ -14,13 +14,11 @@ left char
 
 while true do
 local start_address = 0x03C140 
-local blocks = memory.readbyte(0x03C12E)	--number of blocks atm
 local block_state = 0
 local block_pos = 0
 local right_char = memory.readbyte(0x03C138)	--move with a/b
 local left_char = memory.readbyte(0x03C139)	--move with up/down
-
-	for i = 0, blocks do
+	for i = 0, 7 do
 		block_state = memory.readbyte(start_address+(i*4))
 		if (block_state == 1) then	--it exists, and is not being carried to next section
 

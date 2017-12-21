@@ -1,0 +1,27 @@
+blocks to move when value
+right char (03C138)
+2 (bottom)
+20 (middle)
+38 (top)
+
+left char (03C139)
+11 (bottom)
+29 (middle)
+47 (top)
+
+Format for block address
+03C140 - state; 0 == done; 1 == alive; 5 == carried 
+03C141 - convoyer belt array pos
+03C142 - 1 if moving right, 0 if moving left
+
+03C140 block 1
+03C144 block 2
+03C148 block 3
+
+etc. use 03C12E and a for loop to get all blocks without listing them explicitly
+
+03C12D seems to be tick length; ie. how fast the game is
+the blocks move alternately, determined by 03C12B
+
+Easy mode starts at 2 blocks, and reaches up to 6 blocks by 900 points onward.
+Hard mode starts at 3 blocks, and reaches up to 6 blocks by 600 points onward. It reaches 7 blocks by 780 points onward.

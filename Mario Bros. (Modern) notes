@@ -1,0 +1,47 @@
+Giftboxes seems to be copied at 03AAA4, 03AAB4.
+
+03C138 mario location (0,1,2 for bottom, middle, top)
+03C139 luigi location (see above)
+Takes like 10 frames to move between locations
+
+03C15E is related to box 1's convoyer belt. In other words, which belt its on.
+0 going down the pipe
+1 going out the pipe
+2 bottom right belt, right after the pipe
+3 bottom right belt, after above, moving left
+4 bottom left belt, moving left, use luigi
+5 middle left belt, moving right
+6 middle right belt, moving right, use mario
+7 middle right belt, moving left
+8 middle left belt, moving left, use luigi
+9 top left belt, moving right
+10 top right belt, moving right, use mario
+11 top right belt, moving left
+12 top left belt, moving left, use luigi 
+13 bringing it to truck
+
+Important values are 4, 8, 12 for luigi and 2, 6, 10 for mario. These correspond to the bros being at bottom, middle, top respectively. If you ignore the cake, and it starts to tip, the value would increment by 1 regardless, and the only way to know if its not lifted yet is that 03C160 would be 0.
+
+03C162 is related to where it is in convoyer belt. 03C160 is also related.
+
+When 03C15E == 2, cake pos goes to 213, with 03C160 reaching 47.
+When 03C15E == 4, 8, 12 cake pos goes to 69, with 03C160 reaching 79.
+When 03C15E == 6, 10 cake pos goes to 171, with 03C160 reaching 79.
+
+03C16A Cake 2 value. That's a difference of 0xC per cake.
+
+If the cake starts to tip over, the timers are near the addresses mentioned above: 03AB02, 03AC76, etc. Each cake is offset by 0x7C
+03AAA4 cake x?
+03AAFE is cake state
+1 moving
+2 tipping
+3 being carried
+4 end of above
+5,6,7 related to throwing to truck
+8 land on truck
+9,10 truck full and leaving
+11 falling
+12 fell
+
+03AB02 is the time before fall
+

@@ -1,26 +1,10 @@
 memory.usememorydomain("Combined WRAM")
 
 --[[
-start = 0x03AAA4
-+0x0	x
-+0x2	y
-+0x8	appear as fore/background
-+0x10	x actual
-+0x12	y actual
-+0x21	sprite
-+0x28	x speed
-+0x2A	y speed
-+0x5E	bomb timer
-+0x7C	next object
-0x03CF67	wario pos
-]]--
-
---[[
 Algorithm
 1. Get all objects X/Y/Sprite
 2. Calculate distance between said objects X/Y (based on what it is) vs. it's destination "trigger" point
-2b. In the case object is past desination, base it on when it will detonate. 
-3. Based on the above, rank each object on "importance"; ie. which should it focus first
+3. Check if Wario is at the right spot. If not, move to it
 4. Go and hammer/eat object
 In the case a bomb/bullet is past destination and an apple/chicken is very close to it's desination, focus on apple/chicken first
 ]]--
@@ -131,7 +115,6 @@ function return_objects()
 	return objects
 end
 
-
 function display()
 	local display_x = 0
 	local display_y = 0
@@ -207,12 +190,15 @@ function move()
 				newLow = objects[i].distance
 				closest = i
 			end
+			--using this loop to check apples and chickens
+			apple_reachable = objects[i].obj_type == "Apple" and objects[i].distance <= 1
+			chicken = objects[i].obj_type == "Chicken" and objects[i].distance <= 1
 		end
 	end
 	wrong_spot = positions[l_wario] ~= objects[closest].wario_dest and objects[closest].wario_dest ~= "Unknown"
 	can_move = wario_sprite[memory.readbyte(wario_sprite_addr)] == true
 	
-	if newLow < 10 and wrong_spot and can_move  then
+	if newLow < 10 and wrong_spot and can_move and not apple_reachable and not chicken then
 		if positions[l_wario] == "Top Left" then
 			if objects[closest].wario_dest == "Top Right" then
 				joypad.set({Right = 1})
@@ -259,23 +245,12 @@ function move()
 			end
 		end
 	end
-	
-	--a different loop, since we need to use closest from before
-	for i = 0, #objects do
-		danger = false
-		apple_reachable = false
-		chicken = false
-		dead_npc = objects[i].obj_type == "Dead"
-		if objects[i].distance <= 1 and not dead_npc then
-			danger = (objects[i].obj_type == "Bomb" or objects[i].obj_type == "Bullet")
-			apple_reachable = objects[i].obj_type == "Apple"
-			chicken = objects[i].obj_type == "Chicken"
-		end
-		--checking if wrong spot, to prevent smashing apples/chickens
-		if danger and not wrong_spot then 
-			joypad.set({A = 1})
-			emu.frameadvance()
-		end
+
+	--The object is a bomb or bullet, and is 1 unit away from being reachable by hammer 
+	danger = (objects[closest].obj_type == "Bomb" or objects[closest].obj_type == "Bullet") and objects[closest].distance <= 1
+	if danger and not wrong_spot then
+		joypad.set({A = 1})
+		emu.frameadvance()
 	end
 end
 	

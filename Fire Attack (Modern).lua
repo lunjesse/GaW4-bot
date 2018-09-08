@@ -191,14 +191,17 @@ function move()
 				closest = i
 			end
 			--using this loop to check apples and chickens
-			apple_reachable = objects[i].obj_type == "Apple" and objects[i].distance <= 1
-			chicken = objects[i].obj_type == "Chicken" and objects[i].distance <= 1
+			if objects[i].obj_type == "Apple" then
+				apple_reachable = objects[i].distance <= 2
+			elseif objects[i].obj_type == "Chicken" then
+				chicken = objects[i].distance <= 2
+			end
 		end
 	end
 	wrong_spot = positions[l_wario] ~= objects[closest].wario_dest and objects[closest].wario_dest ~= "Unknown"
 	can_move = wario_sprite[memory.readbyte(wario_sprite_addr)] == true
-	
-	if newLow < 10 and wrong_spot and can_move and not apple_reachable and not chicken then
+	console.log(apple_reachable)
+	if newLow < 10 and wrong_spot and can_move and not (apple_reachable or chicken) then
 		if positions[l_wario] == "Top Left" then
 			if objects[closest].wario_dest == "Top Right" then
 				joypad.set({Right = 1})
@@ -256,6 +259,6 @@ end
 	
 while true do
 move()
--- display()
+display()
 emu.frameadvance()
 end

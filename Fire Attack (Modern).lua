@@ -137,10 +137,9 @@ function display()
 				closest = i
 			end
 		end
-	end
-	--display this
-	for i = 0, #objects do
-		display_x = client.transformPointX(objects[i].x)
+	--display coords
+		display_x = client.transformPointX(objects[i].x)-20
+		display_y = client.transformPointY(objects[i].y)
 		dead_npc = objects[i].obj_type == "Dead"
 		danger = false
 		apple_reachable = false
@@ -150,22 +149,25 @@ function display()
 			apple_reachable = objects[i].obj_type == "Apple"
 			chicken = objects[i].obj_type == "Chicken"
 		end
-		if dead_npc then color = 'black' 
-		else 
+		if not dead_npc then 
 			if danger then color = 'red'
 			elseif apple_reachable then color = 'pink'
 			elseif chicken then color = 'yellow'
 			else color = 'white'
 			end
-			display_y = client.transformPointY(objects[i].y)
+			--display on npcs
 			gui.text(display_x,display_y,"Spr:"..objects[i].sprite,color)
+			display_y = i*15+15
+			--display as a block
+			gui.text(0,display_y,i.." X:"..objects[i].x.."Y:"..objects[i].y.."Spr:"..objects[i].sprite.."D:"..objects[i].distance,color)
 		end
-		display_y = i*15+15
-		gui.text(0,display_y,"X:"..objects[i].x.."Y:"..objects[i].y.."Spr:"..objects[i].sprite.."D:"..objects[i].distance,color)
-		gui.text(0,0,"Spr:"..l_sprite_count,'white')
-		gui.text(0,200,closest.." "..objects[closest].wario_dest)
-		gui.text(0,215,"X:"..objects[closest].x.."Y:"..objects[closest].y.."Spr:"..objects[closest].sprite.."D:"..objects[closest].distance)
 	end
+	if l_sprite_count > max_sprite then max_sprite = l_sprite_count end
+	gui.text(0,0,"Spr:"..l_sprite_count.."("..max_sprite..")",'white')
+	gui.text(0,200,closest.." "..objects[closest].wario_dest)
+	gui.text(0,215,"X:"..objects[closest].x.."Y:"..objects[closest].y.."Spr:"..objects[closest].sprite.."D:"..objects[closest].distance)
+	gui.text(0,230,"03CF4F:"..memory.read_u16_le(0x03CF4F))--difficulty related?
+	gui.text(0,245,"03CF50:"..memory.read_u16_le(0x03CF50))--difficulty related?
 end
 
 function move()
@@ -186,22 +188,27 @@ function move()
 	--find closest object index
 	for i = 0, #objects do
 		if objects[i].obj_type ~= "Dead" then
-			if (objects[i].distance < newLow) and objects[i].obj_type ~= "Dead" then
+			if (objects[i].distance < newLow) then
 				newLow = objects[i].distance
 				closest = i
 			end
-			--using this loop to check apples and chickens
-			if objects[i].obj_type == "Apple" then
+		end
+		--using this loop to check apples and chickens
+		if objects[i].obj_type == "Apple" then
+		--make sure this doesn't get set to false after being set true, if multiple apples appear at once
+			if apple_reachable == false then
 				apple_reachable = objects[i].distance <= 2
-			elseif objects[i].obj_type == "Chicken" then
+			end
+		elseif objects[i].obj_type == "Chicken" then
+		--make sure this doesn't get set to false after being set true, if multiple apples appear at once
+			if chicken == false then
 				chicken = objects[i].distance <= 2
 			end
 		end
 	end
 	wrong_spot = positions[l_wario] ~= objects[closest].wario_dest and objects[closest].wario_dest ~= "Unknown"
 	can_move = wario_sprite[memory.readbyte(wario_sprite_addr)] == true
-	console.log(apple_reachable)
-	if newLow < 10 and wrong_spot and can_move and not (apple_reachable or chicken) then
+	if newLow < 10 and wrong_spot and can_move and not (apple_reachable and chicken) then
 		if positions[l_wario] == "Top Left" then
 			if objects[closest].wario_dest == "Top Right" then
 				joypad.set({Right = 1})
@@ -257,8 +264,9 @@ function move()
 	end
 end
 	
+max_sprite = 0
 while true do
 move()
-display()
+-- display()
 emu.frameadvance()
 end
